@@ -1,5 +1,12 @@
 import re as re
 import pandas as pd
+from datetime import datetime
+import matplotlib.pyplot as plt
+import seaborn as sns
+from wordcloud import WordCloud
+from collections import Counter
+
+
 
 # Data loaded into memory  
 with open('WhatsApp Chat with Section D.txt','r',encoding='utf-8') as f:
@@ -28,8 +35,6 @@ dates = re.findall(pattern,data)
 cleaned_dates = [date.replace('\u202f', ' ') for date in dates]
 cleaned_dates
 
-
-from datetime import datetime
 
 # creating dataframe to store message and corresponding dates
 df = pd.DataFrame({'user_msg':cleaned_messages,'date':cleaned_dates})
@@ -73,8 +78,6 @@ df.head()
 
 #visualization
 
-import matplotlib.pyplot as plt
-
 hours_group = df.groupby('day').size()
 plt.figure(figsize=(10,5))
 hours_group.plot(kind='bar',color='blue')
@@ -83,7 +86,6 @@ plt.xlabel('Day')
 plt.ylabel('Messages')
 plt.show()
 
-import seaborn as sns
 
 #heatmap of day and hours in which users were most active
 heatmap_data=df.groupby(['month','day']).size().unstack(fill_value=0)
@@ -94,7 +96,6 @@ plt.ylabel('Month')
 plt.show()
 
 
-from collections import Counter
 #join all the  message and split into words
 text = ' '.join(df['messages'])
 
@@ -109,7 +110,6 @@ most_common_words = word_count.most_common(5)
 most_common_words
 
 # Generate wordcloud
-from wordcloud import WordCloud
 txt=' '.join(filtered_words)
 # used for frequently used words
 wordcloud = WordCloud(width=800, height=400, background_color='white').generate(txt)
